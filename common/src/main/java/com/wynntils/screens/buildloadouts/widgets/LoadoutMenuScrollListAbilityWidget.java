@@ -8,6 +8,7 @@ import com.wynntils.core.components.Models;
 import com.wynntils.core.text.StyledText;
 import com.wynntils.models.abilitytree.type.AbilityTreeSkillNode;
 import com.wynntils.screens.buildloadouts.BuildLoadoutsScreen;
+import com.wynntils.screens.buildloadouts.type.AbilityTreeNodeItemStack;
 import com.wynntils.utils.colors.CommonColors;
 import com.wynntils.utils.render.FontRenderer;
 import com.wynntils.utils.render.RenderUtils;
@@ -40,7 +41,7 @@ public class LoadoutMenuScrollListAbilityWidget extends AbstractWidget implement
 
         AbilityTreeSkillNode abilityTreeSkillNode = Models.AbilityTree.getNodeFromNameAndClass(
                 this.text.getString(), parent.getSelectedLoadout().getClassType());
-        abilityItemStack = abilityTreeSkillNode.generateItemStack();
+        abilityItemStack = new AbilityTreeNodeItemStack(abilityTreeSkillNode, parent.getSelectedLoadout().hasAbilityTree() ? parent.getSelectedLoadout().abilityTree() : null);
         ultimateAbility = abilityTreeSkillNode.abilityTreeNodeType().isUltimate();
     }
 

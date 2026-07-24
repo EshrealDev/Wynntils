@@ -52,9 +52,15 @@ public class LoadoutMigrationUpfixer implements Upfixer {
         JsonObject newLoadouts = new JsonObject();
         Set<String> allNames = new TreeSet<>();
 
-        if (abilityTrees != null) allNames.addAll(abilityTrees.keySet());
-        if (aspects != null) allNames.addAll(aspects.keySet());
-        if (skillPoints != null) allNames.addAll(skillPoints.keySet());
+        if (abilityTrees != null) {
+            allNames.addAll(abilityTrees.keySet());
+        }
+        if (aspects != null) {
+            allNames.addAll(aspects.keySet());
+        }
+        if (skillPoints != null) {
+            allNames.addAll(skillPoints.keySet());
+        }
 
         for (String name : allNames) {
             JsonObject savedLoadout = new JsonObject();
@@ -63,10 +69,9 @@ public class LoadoutMigrationUpfixer implements Upfixer {
             JsonElement aspect = aspects != null ? aspects.get(name) : null;
             JsonElement skillPoint = skillPoints != null ? skillPoints.get(name) : null;
 
-            int componentCount = 0;
-            if (abilityTree != null) componentCount++;
-            if (aspect != null) componentCount++;
-            if (skillPoint != null) componentCount++;
+            int componentCount = (abilityTree != null ? 1 : 0)
+                    + (aspect != null ? 1 : 0)
+                    + (skillPoint != null ? 1 : 0);
 
             String type;
             if (componentCount > 1) {
