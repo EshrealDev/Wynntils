@@ -22,6 +22,7 @@ public abstract class ScrollListWidget extends AbstractWidget {
     private static final int SCROLL_BAR_HEIGHT_PADDING = 4;
     private static final int SCROLL_BAR_WIDTH_PADDING = 4;
     public int scrollOffset = 0;
+    private double dragOffsetY;
     private boolean draggingScroll = false;
     private final int x;
     private final int y;
@@ -85,16 +86,8 @@ public abstract class ScrollListWidget extends AbstractWidget {
     private void renderScroll(GuiGraphics guiGraphics) {
         int maxScrollOffset = getMaxScrollOffset();
         scrollY = maxScrollOffset <= 0
-                ? this.y + SCROLL_BAR_BUTTON_HEIGHT_PADDING
-                : MathUtils.map(
-                        scrollOffset,
-                        0,
-                        maxScrollOffset,
-                        this.y + SCROLL_BAR_BUTTON_HEIGHT_PADDING,
-                        this.y
-                                + this.height
-                                - Texture.BUILD_LOADOUTS_SCOLL_BAR_BUTTON.height()
-                                - SCROLL_BAR_BUTTON_HEIGHT_PADDING);
+                ? getScrollTrackTop()
+                : MathUtils.map(scrollOffset, 0, maxScrollOffset, getScrollTrackTop(), getScrollTrackBottom());
 
         RenderUtils.drawTexturedRect(
                 guiGraphics,
@@ -107,12 +100,10 @@ public abstract class ScrollListWidget extends AbstractWidget {
     public boolean mouseDragged(MouseButtonEvent event, double dragX, double dragY) {
         if (!draggingScroll) return false;
 
-        int scrollAreaStartY = this.y + SCROLL_BAR_BUTTON_HEIGHT_PADDING + 5;
-        int scrollAreaHeight =
-                this.height - Texture.BUILD_LOADOUTS_SCOLL_BAR_BUTTON.height() - SCROLL_BAR_BUTTON_HEIGHT_PADDING;
+        double newScrollY = event.y() - dragOffsetY;
 
         int newOffset = Math.round(MathUtils.map(
-                (float) event.y(), scrollAreaStartY, scrollAreaStartY + scrollAreaHeight, 0, getMaxScrollOffset()));
+                (float) newScrollY, getScrollTrackTop(), getScrollTrackBottom(), 0, getMaxScrollOffset()));
 
         newOffset = Math.max(0, Math.min(newOffset, getMaxScrollOffset()));
 
@@ -126,13 +117,14 @@ public abstract class ScrollListWidget extends AbstractWidget {
         if (!draggingScroll) {
             if (getMaxScrollOffset() > 0 && isOntopOfScrollDragButton(event.x(), event.y())) {
                 draggingScroll = true;
+                dragOffsetY = event.y() - scrollY;
 
                 return true;
             }
         }
 
         for (AbstractWidget widget : getWidgets()) {
-            if (widget.isMouseOver(event.x(), event.y() + scrollOffset)) {
+            if (widget.isMouseOver(event.x(), event.y())) {
                 return widget.mouseClicked(event, isDoubleClick);
             }
         }
@@ -180,6 +172,17 @@ public abstract class ScrollListWidget extends AbstractWidget {
                 this.x + this.width - SCROLL_BAR_BUTTON_WIDTH_PADDING,
                 (int) scrollY,
                 (int) (scrollY + Texture.SCROLL_BUTTON.height()));
+    }
+
+    private int getScrollTrackTop() {
+        return this.y + SCROLL_BAR_BUTTON_HEIGHT_PADDING;
+    }
+
+    private int getScrollTrackBottom() {
+        return this.y
+                + this.height
+                - Texture.BUILD_LOADOUTS_SCOLL_BAR_BUTTON.height()
+                - SCROLL_BAR_BUTTON_HEIGHT_PADDING;
     }
 
     @Override

@@ -58,7 +58,7 @@ public class LoadoutWidget extends AbstractWidget implements IconRenderer {
         handleCursor(guiGraphics);
 
         if (parent.getSelectedLoadout() != loadout) {
-            if (!loadout.favourited()) {
+            if (!loadout.favorited()) {
                 RenderUtils.drawNineSliceScalingTexturedRect(
                         guiGraphics,
                         Texture.BUILD_LOADOUTS_WIDGET_BACKGROUND_LIGHT,
@@ -141,6 +141,7 @@ public class LoadoutWidget extends AbstractWidget implements IconRenderer {
 
     @Override
     public void setY(int y) {
+        super.setY(y);
         this.y = y;
     }
 

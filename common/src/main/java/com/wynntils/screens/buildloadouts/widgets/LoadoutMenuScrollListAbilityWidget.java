@@ -80,6 +80,7 @@ public class LoadoutMenuScrollListAbilityWidget extends AbstractWidget implement
 
     @Override
     public void setY(int y) {
+        super.setY(y);
         this.y = y;
     }
 

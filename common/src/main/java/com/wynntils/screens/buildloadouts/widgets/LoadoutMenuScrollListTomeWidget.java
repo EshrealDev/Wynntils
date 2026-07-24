@@ -66,6 +66,7 @@ public class LoadoutMenuScrollListTomeWidget extends AbstractWidget implements I
 
     @Override
     public void setY(int y) {
+        super.setY(y);
         this.y = y;
     }
 

@@ -34,6 +34,7 @@ public class MakeNewLoadoutButton extends AbstractButton {
     private final int y;
     private final BuildLoadoutsScreen parent;
     private boolean buttonConfirm = false;
+    private boolean makingLoadout = false;
 
     public MakeNewLoadoutButton(int x, int y, BuildLoadoutsScreen parent) {
         super(x, y, 133 - 10, 20, Component.literal("Make New Loadout Button"));
@@ -46,24 +47,34 @@ public class MakeNewLoadoutButton extends AbstractButton {
     protected void renderContents(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         handleCursor(guiGraphics);
 
-        RenderUtils.drawNineSliceScalingTexturedRect(
-                guiGraphics,
-                !buttonConfirm
-                        ? Texture.BUILD_LOADOUTS_WIDGET_BACKGROUND_GREEN
-                        : Texture.BUILD_LOADOUTS_WIDGET_BACKGROUND_RED,
-                x,
-                y,
-                this.width,
-                this.height);
+        Texture background;
+
+        if (makingLoadout) {
+            background = Texture.BUILD_LOADOUTS_WIDGET_BACKGROUND_DARKGREEN;
+        } else if (buttonConfirm) {
+            background = Texture.BUILD_LOADOUTS_WIDGET_BACKGROUND_RED;
+        } else {
+            background = Texture.BUILD_LOADOUTS_WIDGET_BACKGROUND_GREEN;
+        }
+
+        StyledText text;
+        if (makingLoadout) {
+            text = StyledText.fromComponent(
+                    Component.translatable("screens.wynntils.buildLoadouts.newLoadoutMenu.makeNewLoadout.creating"));
+        } else if (buttonConfirm) {
+            text = StyledText.fromComponent(
+                    Component.translatable("screens.wynntils.buildLoadouts.newLoadoutMenu.makeNewLoadout.create"));
+        } else {
+            text = StyledText.fromComponent(
+                    Component.translatable("screens.wynntils.buildLoadouts.newLoadoutMenu.makeNewLoadout.confirm"));
+        }
+
+        RenderUtils.drawNineSliceScalingTexturedRect(guiGraphics, background, x, y, this.width, this.height);
 
         FontRenderer.getInstance()
                 .renderText(
                         guiGraphics,
-                        !buttonConfirm
-                                ? StyledText.fromComponent(Component.translatable(
-                                        "screens.wynntils.buildLoadouts.newLoadoutMenu.makeNewLoadout.create"))
-                                : StyledText.fromComponent(Component.translatable(
-                                        "screens.wynntils.buildLoadouts.newLoadoutMenu.makeNewLoadout.confirm")),
+                        text,
                         (this.x + this.width / 2f),
                         (this.y + this.height / 2f),
                         CommonColors.WHITE,
@@ -78,6 +89,7 @@ public class MakeNewLoadoutButton extends AbstractButton {
     @Override
     public boolean mouseClicked(MouseButtonEvent event, boolean isDoubleClick) {
         if (event.button() != GLFW.GLFW_MOUSE_BUTTON_LEFT) return false;
+        if (makingLoadout) return false;
 
         this.playDownSound(Minecraft.getInstance().getSoundManager());
 
@@ -120,6 +132,7 @@ public class MakeNewLoadoutButton extends AbstractButton {
     }
 
     private void saveLoadout(String name, LoadoutType type) {
+        makingLoadout = true;
         List<LoadoutSaveStep> steps = new ArrayList<>();
 
         switch (type) {
@@ -148,6 +161,7 @@ public class MakeNewLoadoutButton extends AbstractButton {
                         parent.loadoutScrollListWidget.scrollOffset = 0;
                         parent.loadoutScrollListWidget.populateLoadouts();
                         parent.statusWidget.completed(message);
+                        makingLoadout = false;
                     } else {
                         runSaveSteps(steps, index + 1, name);
                     }

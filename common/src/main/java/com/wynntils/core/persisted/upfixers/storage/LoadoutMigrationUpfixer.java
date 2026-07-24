@@ -93,7 +93,7 @@ public class LoadoutMigrationUpfixer implements Upfixer {
             }
 
             savedLoadout.add("tomes", null);
-            savedLoadout.addProperty("favourited", false);
+            savedLoadout.addProperty("favorited", false);
 
             newLoadouts.add(name, savedLoadout);
         }

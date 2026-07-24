@@ -20,7 +20,7 @@ public record Loadout(
         SavableTomeSet tomes,
         SavableAbilityTree abilityTree,
         SavableAspectSet aspects,
-        boolean favourited) {
+        boolean favorited) {
     public boolean hasSkillPoints() {
         return skillPoints != null;
     }

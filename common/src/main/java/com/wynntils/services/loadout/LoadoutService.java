@@ -71,7 +71,7 @@ public class LoadoutService extends Service {
                 existing != null ? existing.tomes() : null,
                 abilityTree,
                 existing != null ? existing.aspects() : null,
-                existing != null && existing.favourited());
+                existing != null && existing.favorited());
         saveLoadout(name, updated);
     }
 
@@ -84,7 +84,7 @@ public class LoadoutService extends Service {
                 existing != null ? existing.tomes() : null,
                 existing != null ? existing.abilityTree() : null,
                 aspects,
-                existing != null && existing.favourited());
+                existing != null && existing.favorited());
         saveLoadout(name, updated);
     }
 
@@ -97,7 +97,7 @@ public class LoadoutService extends Service {
                 tomes,
                 existing != null ? existing.abilityTree() : null,
                 existing != null ? existing.aspects() : null,
-                existing != null && existing.favourited());
+                existing != null && existing.favorited());
         saveLoadout(name, updated);
     }
 
@@ -112,13 +112,13 @@ public class LoadoutService extends Service {
                 existing.tomes(),
                 existing.abilityTree(),
                 existing.aspects(),
-                existing.favourited());
+                existing.favorited());
 
         loadouts.get().remove(oldName);
         saveLoadout(newName, updated);
     }
 
-    public void setFavourited(String name, boolean favourited) {
+    public void setFavorited(String name, boolean favorited) {
         Loadout existing = getLoadout(name);
         if (existing == null) return;
         Loadout updated = new Loadout(
@@ -128,7 +128,7 @@ public class LoadoutService extends Service {
                 existing.tomes(),
                 existing.abilityTree(),
                 existing.aspects(),
-                favourited);
+                favorited);
         saveLoadout(name, updated);
     }
 

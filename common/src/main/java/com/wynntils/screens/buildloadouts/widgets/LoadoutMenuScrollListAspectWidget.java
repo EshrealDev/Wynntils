@@ -76,6 +76,7 @@ public class LoadoutMenuScrollListAspectWidget extends AbstractWidget implements
 
     @Override
     public void setY(int y) {
+        super.setY(y);
         this.y = y;
     }
 

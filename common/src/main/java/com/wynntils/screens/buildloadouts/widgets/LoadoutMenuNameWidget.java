@@ -9,6 +9,7 @@ import com.wynntils.core.components.Services;
 import com.wynntils.core.text.StyledText;
 import com.wynntils.core.text.type.StyleType;
 import com.wynntils.screens.base.TextboxScreen;
+import com.wynntils.screens.base.TooltipProvider;
 import com.wynntils.screens.base.widgets.TextInputBoxWidget;
 import com.wynntils.screens.buildloadouts.BuildLoadoutsScreen;
 import com.wynntils.services.loadout.type.Loadout;
@@ -19,7 +20,11 @@ import com.wynntils.utils.render.Texture;
 import com.wynntils.utils.render.type.HorizontalAlignment;
 import com.wynntils.utils.render.type.TextShadow;
 import com.wynntils.utils.render.type.VerticalAlignment;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Consumer;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -29,11 +34,13 @@ import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 import org.lwjgl.glfw.GLFW;
 
-public class LoadoutMenuNameWidget extends TextInputBoxWidget {
+public class LoadoutMenuNameWidget extends TextInputBoxWidget implements TooltipProvider {
     private static final int MAX_VISIBLE_CHARARCTERS = 27;
     private static final int EDIT_BUTTON_WIDTH = 23;
     private static final int EDIT_BUTTON_HEIGHT = 20;
     private static final float VERTICAL_OFFSET = 6.5f;
+    private List<Component> generatedTooltip = new ArrayList<>();
+    private boolean editButtonHovered = false;
 
     private final BuildLoadoutsScreen parent;
     private boolean editing = false;
@@ -48,13 +55,15 @@ public class LoadoutMenuNameWidget extends TextInputBoxWidget {
         super(x, y, width, 20, Component.literal("Loadout Menu Name Widget"), onUpdateConsumer, textboxScreen);
         this.parent = parent;
         this.textPadding = 5;
+        buildTooltip();
     }
 
     @Override
     public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         renderBackground(guiGraphics);
 
-        if (isEditButtonHovered(mouseX, mouseY)) {
+        editButtonHovered = isEditButtonHovered(mouseX, mouseY);
+        if (editButtonHovered) {
             handleCursor(guiGraphics);
         }
 
@@ -280,6 +289,7 @@ public class LoadoutMenuNameWidget extends TextInputBoxWidget {
         textboxScreen.setFocusedTextInput(this);
         this.setFocused(true);
         setCursorPosition(textBoxInput.length());
+        buildTooltip();
     }
 
     private void stopEditing() {
@@ -298,6 +308,7 @@ public class LoadoutMenuNameWidget extends TextInputBoxWidget {
         Services.loadout.setName(oldName, newName);
         parent.setSelectedLoadout(Services.loadout.getLoadout(newName));
         parent.loadoutScrollListWidget.populateLoadouts();
+        buildTooltip();
     }
 
     private boolean isEditButtonHovered(double mouseX, double mouseY) {
@@ -334,5 +345,24 @@ public class LoadoutMenuNameWidget extends TextInputBoxWidget {
             this.textBoxInput = selected.name();
             setCursorAndHighlightPositions(this.textBoxInput.length());
         }
+    }
+
+    public void buildTooltip() {
+        this.generatedTooltip = new ArrayList<>();
+        if (!editing) {
+            this.generatedTooltip.add(Component.translatable(
+                            "screens.wynntils.buildLoadouts.loadoutMenu.loadoutNameWidget.tooltip.rename")
+                    .withStyle(ChatFormatting.GOLD));
+        } else {
+            this.generatedTooltip.add(Component.translatable(
+                            "screens.wynntils.buildLoadouts.loadoutMenu.loadoutNameWidget.tooltip.confirm")
+                    .withStyle(ChatFormatting.GOLD));
+        }
+    }
+
+    @Override
+    public List<Component> getTooltipLines() {
+        if (!editButtonHovered) return Collections.emptyList();
+        return Collections.unmodifiableList(this.generatedTooltip);
     }
 }

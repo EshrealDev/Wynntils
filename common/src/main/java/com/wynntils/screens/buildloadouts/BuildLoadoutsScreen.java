@@ -14,7 +14,7 @@ import com.wynntils.screens.buildloadouts.type.MenuCategory;
 import com.wynntils.screens.buildloadouts.widgets.BuildLoadoutScrollListWidget;
 import com.wynntils.screens.buildloadouts.widgets.ItemTooltipProvider;
 import com.wynntils.screens.buildloadouts.widgets.LoadoutMenuDeleteButton;
-import com.wynntils.screens.buildloadouts.widgets.LoadoutMenuFavouriteButton;
+import com.wynntils.screens.buildloadouts.widgets.LoadoutMenuFavoriteButton;
 import com.wynntils.screens.buildloadouts.widgets.LoadoutMenuItemWidget;
 import com.wynntils.screens.buildloadouts.widgets.LoadoutMenuLoadButton;
 import com.wynntils.screens.buildloadouts.widgets.LoadoutMenuNameWidget;
@@ -87,7 +87,7 @@ public class BuildLoadoutsScreen extends WynntilsScreen {
     public LoadoutMenuOverviewWidget loadoutMenuOverviewWidget;
     public LoadoutMenuItemWidget loadoutMenuItemWidget;
     public BuildLoadoutScrollListWidget buildLoadoutScrollListWidget;
-    public LoadoutMenuFavouriteButton loadoutMenuFavouriteButton;
+    public LoadoutMenuFavoriteButton loadoutMenuFavoriteButton;
     public LoadoutMenuScrollListWidget loadoutMenuScrollListWidget;
 
     private MenuCategory currentCategory = MenuCategory.BUILD_LOADOUT;
@@ -265,9 +265,9 @@ public class BuildLoadoutsScreen extends WynntilsScreen {
                 this);
         this.addRenderableWidget(loadoutMenuNameWidget);
 
-        loadoutMenuFavouriteButton = new LoadoutMenuFavouriteButton(
+        loadoutMenuFavoriteButton = new LoadoutMenuFavoriteButton(
                 offsetX + WIDGET_HOLDER_THREE_WIDTH_OFFSET + RIGHT_PAGE_WIDTH - 25, offsetY + HEIGHT_OFFSET + 5, this);
-        this.addRenderableWidget(loadoutMenuFavouriteButton);
+        this.addRenderableWidget(loadoutMenuFavoriteButton);
 
         loadoutMenuLoadButton = new LoadoutMenuLoadButton(
                 offsetX + WIDGET_HOLDER_THREE_WIDTH_OFFSET, offsetY + HEIGHT_OFFSET + RIGHT_PAGE_HEIGHT - 20, this);
@@ -448,7 +448,7 @@ public class BuildLoadoutsScreen extends WynntilsScreen {
 
         // loadouts
         loadoutMenuNameWidget.visible = false;
-        loadoutMenuFavouriteButton.visible = false;
+        loadoutMenuFavoriteButton.visible = false;
         loadoutMenuLoadButton.visible = false;
         loadoutMenuUpdateButton.visible = false;
         loadoutMenuDeleteButton.visible = false;
@@ -472,7 +472,7 @@ public class BuildLoadoutsScreen extends WynntilsScreen {
 
         if (getCurrentCategory() != MenuCategory.NEW_LOADOUT && getSelectedLoadout() != null) {
             loadoutMenuNameWidget.visible = true;
-            loadoutMenuFavouriteButton.visible = true;
+            loadoutMenuFavoriteButton.visible = true;
             loadoutMenuLoadButton.visible = true;
             loadoutMenuUpdateButton.visible = true;
             loadoutMenuDeleteButton.visible = true;
@@ -522,6 +522,8 @@ public class BuildLoadoutsScreen extends WynntilsScreen {
             loadoutMenuNameWidget.cancelEditing();
         }
         this.selectedLoadout = loadout;
+        loadoutMenuFavoriteButton.buildTooltip();
+        loadoutMenuNameWidget.buildTooltip();
         updateMenu();
     }
 
