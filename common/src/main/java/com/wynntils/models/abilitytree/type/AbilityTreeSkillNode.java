@@ -5,23 +5,8 @@
 package com.wynntils.models.abilitytree.type;
 
 import com.google.gson.JsonArray;
-import com.wynntils.core.text.StyledText;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import net.minecraft.ChatFormatting;
-import net.minecraft.core.component.DataComponents;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
-import net.minecraft.util.Unit;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.component.CustomModelData;
-import net.minecraft.world.item.component.ItemLore;
-import net.minecraft.world.item.component.TooltipDisplay;
 
 public record AbilityTreeSkillNode(
         int id,

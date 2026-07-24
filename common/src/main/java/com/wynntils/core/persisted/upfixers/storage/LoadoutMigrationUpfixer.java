@@ -69,9 +69,8 @@ public class LoadoutMigrationUpfixer implements Upfixer {
             JsonElement aspect = aspects != null ? aspects.get(name) : null;
             JsonElement skillPoint = skillPoints != null ? skillPoints.get(name) : null;
 
-            int componentCount = (abilityTree != null ? 1 : 0)
-                    + (aspect != null ? 1 : 0)
-                    + (skillPoint != null ? 1 : 0);
+            int componentCount =
+                    (abilityTree != null ? 1 : 0) + (aspect != null ? 1 : 0) + (skillPoint != null ? 1 : 0);
 
             String type;
             if (componentCount > 1) {

@@ -1,3 +1,7 @@
+/*
+ * Copyright © Wynntils 2026.
+ * This file is released under LGPLv3. See LICENSE for full license details.
+ */
 package com.wynntils.screens.buildloadouts.type;
 
 import com.google.gson.JsonArray;
@@ -5,10 +9,9 @@ import com.wynntils.core.text.StyledText;
 import com.wynntils.models.abilitytree.type.AbilityTreeSkillNode;
 import com.wynntils.models.abilitytree.type.ArchetypeInfo;
 import com.wynntils.models.abilitytree.type.ArchetypeRequirement;
+import com.wynntils.models.abilitytree.type.SavableAbilityTree;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.wynntils.models.abilitytree.type.SavableAbilityTree;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
@@ -111,7 +114,7 @@ public class AbilityTreeNodeItemStack extends ItemStack {
         }
 
         // Required archetype
-        //§a✔ §7Min Arcanist Archetype: §f19§7/12'}
+        // §a✔ §7Min Arcanist Archetype: §f19§7/12'}
         ArchetypeRequirement requiredArchetype = abilityTreeSkillNode.requiredArchetype();
         if (requiredArchetype != null) {
             loreLines.add(Component.literal("✔ ")
@@ -119,8 +122,11 @@ public class AbilityTreeNodeItemStack extends ItemStack {
                     .append(Component.literal("Min " + requiredArchetype.name() + " Archetype: ")
                             .withStyle(
                                     Style.EMPTY.withColor(ChatFormatting.GRAY).withItalic(false))
-                            .append(Component.literal(String.valueOf(savableAbilityTree.getArchetypeCount(requiredArchetype.name())))
-                                    .withStyle(Style.EMPTY.withColor(ChatFormatting.WHITE).withItalic(false)))
+                            .append(Component.literal(String.valueOf(
+                                            savableAbilityTree.getArchetypeCount(requiredArchetype.name())))
+                                    .withStyle(Style.EMPTY
+                                            .withColor(ChatFormatting.WHITE)
+                                            .withItalic(false)))
                             .append(Component.literal("/" + requiredArchetype.required())
                                     .withStyle(Style.EMPTY
                                             .withColor(ChatFormatting.GRAY)
