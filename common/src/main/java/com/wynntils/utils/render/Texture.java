@@ -350,6 +350,15 @@ public enum Texture {
     WOODCUTTING("icons/map/woodcutting.png", 16, 17),
     WOODWORKING_STATION("icons/map/woodworking_station.png", 17, 15),
 
+    // Category Management Screen
+    CATEGORY_MANAGER_ICON("map/managers/category_manager/category_manager_icon.png", 16, 16),
+
+    // Provider Management Screen
+    PROVIDER_MANAGER_ICON("map/managers/provider_manager/provider_manager_icon.png", 16, 16),
+
+    // Map Managers
+    MANAGER_BACKGROUND("map/managers/manager_background.png", 576, 320),
+
     // Player Viewer
     DUEL_ICON("icons/player_viewer/duel_icon.png", 14, 14),
     FRIEND_ADD_ICON("icons/player_viewer/friend_add_icon.png", 14, 14),
