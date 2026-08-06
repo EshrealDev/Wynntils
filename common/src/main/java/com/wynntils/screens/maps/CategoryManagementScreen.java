@@ -4,9 +4,9 @@ import com.wynntils.core.WynntilsMod;
 import com.wynntils.core.components.Services;
 import com.wynntils.core.consumers.screens.WynntilsScreen;
 import com.wynntils.screens.base.widgets.TextInputBoxWidget;
-import com.wynntils.screens.buildloadouts.widgets.StatusWidget;
 import com.wynntils.screens.maps.categorymanagerwidgets.CategorySearchWidget;
 import com.wynntils.screens.maps.categorymanagerwidgets.CategoryTreeWidget;
+import com.wynntils.screens.maps.categorymanagerwidgets.DoubleScrollBarWidget;
 import com.wynntils.utils.mc.McUtils;
 import com.wynntils.utils.render.RenderUtils;
 import com.wynntils.utils.render.Texture;
@@ -47,7 +47,7 @@ public final class CategoryManagementScreen extends WynntilsScreen {
         categorySearchWidget = new CategorySearchWidget(
                 offsetX + WIDTH_OFFSET,
                 offsetY + HEIGHT_OFFSET,
-                (text) -> {},
+                (text) -> categoryTreeWidget.filter(text),
                 this
         );
         this.addRenderableWidget(categorySearchWidget);
@@ -57,12 +57,10 @@ public final class CategoryManagementScreen extends WynntilsScreen {
                 offsetY + HEIGHT_OFFSET + 25,
                 200,
                 284 - 25,
-                this);
+                this
+        );
+        categoryTreeWidget.setCategories(Services.MapData.getCategories().toList());
         this.addRenderableWidget(categoryTreeWidget);
-
-        Services.MapData.getCategories().forEach((thing) -> {
-            WynntilsMod.info("category: " + thing.getCategoryId());
-        });
     }
 
     @Override
