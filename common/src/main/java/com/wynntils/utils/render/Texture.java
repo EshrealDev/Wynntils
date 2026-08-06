@@ -358,6 +358,10 @@ public enum Texture {
 
     // Map Managers
     MANAGER_BACKGROUND("map/managers/manager_background.png", 576, 320),
+    MANAGER_WIDGET_BORDER("map/managers/widget_border.png", 34, 19, 6, 6, 6, 6),
+    MANAGER_SCROLL_BAR_VERTICAL("map/managers/scroll_bar_vertical.png", 9, 65, 5, 4, 13, 13),
+    MANAGER_SCROLL_BAR_HORIZONTAL("map/managers/scroll_bar_horizontal.png", 65, 9, 13, 13, 4, 5),
+    MANAGER_SCROLL_BAR_BUTTON("map/managers/scroll_bar_button.png",  9, 8, 4, 4, 4, 4),
 
     // Player Viewer
     DUEL_ICON("icons/player_viewer/duel_icon.png", 14, 14),
