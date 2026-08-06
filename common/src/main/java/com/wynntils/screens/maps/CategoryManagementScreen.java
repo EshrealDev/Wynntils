@@ -59,6 +59,10 @@ public final class CategoryManagementScreen extends WynntilsScreen {
                 284 - 25,
                 this);
         this.addRenderableWidget(categoryTreeWidget);
+
+        Services.MapData.getCategories().forEach((thing) -> {
+            WynntilsMod.info("category: " + thing.getCategoryId());
+        });
     }
 
     @Override

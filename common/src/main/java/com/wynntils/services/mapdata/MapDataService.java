@@ -82,6 +82,10 @@ public class MapDataService extends Service {
         reloadJsonProviders();
     }
 
+    public Stream<MapCategory> getCategories() {
+        return getProviders().flatMap(MapDataProvider::getCategories);
+    }
+
     public Stream<MapFeature> getFeatures() {
         return getProviders().flatMap(MapDataProvider::getFeatures);
     }

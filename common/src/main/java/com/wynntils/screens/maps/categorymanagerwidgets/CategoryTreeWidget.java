@@ -20,24 +20,31 @@ import net.minecraft.network.chat.Component;
 
 public class CategoryTreeWidget extends AbstractWidget {
     private static final float SCROLL_FACTOR = 10f;
+
     private static final int SCROLL_BAR_HEIGHT_PADDING = 4;
     private static final int SCROLL_BAR_WIDTH_PADDING = 4;
+
     // Thumb never shrinks below this, otherwise it'd become an unclickable sliver on huge canvases.
     private static final int MIN_SCROLL_BUTTON_LENGTH = 12;
+
     // Gap left between the thumb and the track's ends when scrolled all the way to either extreme.
     private static final int SCROLL_BUTTON_EDGE_GAP = 1;
+
     // How far the vertical bar sits from the widget's right edge.
     private static final int VERTICAL_SCROLL_BAR_EDGE_PADDING = 3;
+
     // How far the horizontal bar sits from the widget's bottom edge.
     private static final int HORIZONTAL_SCROLL_BAR_EDGE_PADDING = 3;
-    // The up/down/left/right arrows are baked into the top/bottom (or left/right) caps of the
-// private static final int SCROLL_ARROW_BUTTON_SIZE = 9;
+
+    // scroll button size
     private static final int SCROLL_ARROW_BUTTON_WIDTH_VERTICAL = 9;
     private static final int SCROLL_ARROW_BUTTON_HEIGHT_VERTICAL = 10;
     private static final int SCROLL_ARROW_BUTTON_WIDTH_HORIZONTAL = 10;
     private static final int SCROLL_ARROW_BUTTON_HEIGHT_HORIZONTAL = 9;
+
     // Gap between an arrow cap and the start/end of the thumb's travel area.
     private static final int SCROLL_ARROW_BUTTON_GAP = 0;
+
     // How far scrollOffset moves per arrow button click.
     private static final int SCROLL_ARROW_STEP = 10;
 
@@ -45,8 +52,6 @@ public class CategoryTreeWidget extends AbstractWidget {
     private final int y;
     private final CategoryManagementScreen parent;
 
-    // Full size of the tree content. The viewport (this.width/this.height) stays fixed;
-    // the canvas grows as nodes are expanded. Call setCanvasSize() whenever the tree changes.
     private int canvasWidth;
     private int canvasHeight;
 
@@ -94,10 +99,6 @@ public class CategoryTreeWidget extends AbstractWidget {
                 this.height - SCROLL_BAR_WIDTH_PADDING * 2 - Texture.MANAGER_SCROLL_BAR_HORIZONTAL.height() - 4);
 
         // TODO: draw tree nodes + connecting lines here, translated by -scrollOffsetX/-scrollOffsetY,
-        // e.g. guiGraphics.pose().pushMatrix();
-        //      guiGraphics.pose().translate(-scrollOffsetX, -scrollOffsetY);
-        //      ...
-        //      guiGraphics.pose().popMatrix();
         FontRenderer.getInstance()
                 .renderText(
                         guiGraphics,
@@ -140,13 +141,9 @@ public class CategoryTreeWidget extends AbstractWidget {
         float barAreaTop = getVerticalBarAreaTop();
         float barAreaHeight = getVerticalBarAreaBottom() - barAreaTop;
 
-        // The up/down arrows are baked into this texture's top/bottom caps now, so it's drawn
-        // across the entire bar area instead of just the middle strip between two separate
-        // arrow images.
         RenderUtils.drawNineSliceScalingTexturedRect(
                 guiGraphics, Texture.MANAGER_SCROLL_BAR_VERTICAL, barX, barAreaTop, Texture.MANAGER_SCROLL_BAR_VERTICAL.width(), barAreaHeight);
 
-        // Thumb sizing/travel still needs to stay clear of the (now baked-in) arrow caps.
         verticalButtonLength = getScaledButtonLength(getVerticalTrackHeight(), this.height, canvasHeight);
 
         int maxScrollOffset = getMaxScrollOffsetY();
@@ -170,13 +167,9 @@ public class CategoryTreeWidget extends AbstractWidget {
         float barAreaLeft = getHorizontalBarAreaLeft();
         float barAreaWidth = getHorizontalBarAreaRight() - barAreaLeft;
 
-        // The left/right arrows are baked into this texture's left/right caps now, so it's drawn
-        // across the entire bar area instead of just the middle strip between two separate
-        // arrow images.
         RenderUtils.drawNineSliceScalingTexturedRect(
                 guiGraphics, Texture.MANAGER_SCROLL_BAR_HORIZONTAL, barAreaLeft, barY, barAreaWidth, Texture.MANAGER_SCROLL_BAR_HORIZONTAL.height());
 
-        // Thumb sizing/travel still needs to stay clear of the (now baked-in) arrow caps.
         horizontalButtonLength = getScaledButtonLength(getHorizontalTrackWidth(), this.width, canvasWidth);
 
         int maxScrollOffset = getMaxScrollOffsetX();
@@ -190,7 +183,6 @@ public class CategoryTreeWidget extends AbstractWidget {
     }
 
 
-    /** Thumb length scales with how much of the canvas is currently visible, like a normal OS scrollbar. */
     private float getScaledButtonLength(float trackLength, int viewportSize, int canvasSize) {
         if (canvasSize <= 0) return trackLength;
 
@@ -263,7 +255,7 @@ public class CategoryTreeWidget extends AbstractWidget {
             return true;
         }
 
-        // TODO: hit-test tree nodes here once they exist.
+        // TODO: add tree node buttons
 
         return true;
     }
