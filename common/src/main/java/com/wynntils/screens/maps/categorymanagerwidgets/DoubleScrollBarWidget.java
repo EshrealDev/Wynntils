@@ -249,9 +249,7 @@ public abstract class DoubleScrollBarWidget extends AbstractWidget {
             return true;
         }
 
-        // TODO: add tree node buttons
-
-        return true;
+        return false;
     }
 
     @Override
@@ -337,7 +335,7 @@ public abstract class DoubleScrollBarWidget extends AbstractWidget {
     }
 
     private float getVerticalArrowButtonX() {
-        return getVerticalScrollBarX() + (Texture.MANAGER_SCROLL_BAR_VERTICAL.width() - SCROLL_ARROW_BUTTON_WIDTH_VERTICAL) / 2f;
+        return getVerticalScrollBarX();
     }
 
     private float getVerticalUpButtonY() {
@@ -379,7 +377,7 @@ public abstract class DoubleScrollBarWidget extends AbstractWidget {
     }
 
     private float getHorizontalArrowButtonY() {
-        return getHorizontalScrollBarY() + (Texture.MANAGER_SCROLL_BAR_HORIZONTAL.height() - SCROLL_ARROW_BUTTON_HEIGHT_HORIZONTAL) / 2f;
+        return getHorizontalScrollBarY();
     }
 
     private float getHorizontalLeftButtonX() {

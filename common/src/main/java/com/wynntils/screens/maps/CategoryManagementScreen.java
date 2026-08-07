@@ -7,6 +7,7 @@ import com.wynntils.screens.base.widgets.TextInputBoxWidget;
 import com.wynntils.screens.maps.categorymanagerwidgets.CategorySearchWidget;
 import com.wynntils.screens.maps.categorymanagerwidgets.CategoryTreeWidget;
 import com.wynntils.screens.maps.categorymanagerwidgets.DoubleScrollBarWidget;
+import com.wynntils.services.mapdata.type.MapCategory;
 import com.wynntils.utils.mc.McUtils;
 import com.wynntils.utils.render.RenderUtils;
 import com.wynntils.utils.render.Texture;
@@ -14,6 +15,8 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
+
+import java.util.Optional;
 
 public final class CategoryManagementScreen extends WynntilsScreen {
     private static final int WIDTH_OFFSET = 15;
@@ -27,6 +30,7 @@ public final class CategoryManagementScreen extends WynntilsScreen {
     public CategorySearchWidget categorySearchWidget;
     public CategoryTreeWidget categoryTreeWidget;
 
+    private MapCategory selectedCategory;
 
     private CategoryManagementScreen(MainMapScreen previousScreen) {
         super(Component.literal("Category Management Screen"));
@@ -91,5 +95,12 @@ public final class CategoryManagementScreen extends WynntilsScreen {
         McUtils.mc().setScreen(previousScreen);
     }
 
+    /** Called by {@link CategoryTreeWidget} when a leaf/branch with an actual category is clicked. */
+    public void setSelectedCategory(MapCategory category) {
+        this.selectedCategory = category;
+    }
 
+    public Optional<MapCategory> getSelectedCategory() {
+        return Optional.ofNullable(selectedCategory);
+    }
 }

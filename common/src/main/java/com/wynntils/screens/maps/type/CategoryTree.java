@@ -1,4 +1,4 @@
-package com.wynntils.screens.maps.type;  // adjust to your package
+package com.wynntils.screens.maps.type;
 
 import com.wynntils.services.mapdata.type.MapCategory;
 import com.wynntils.utils.StringUtils;
