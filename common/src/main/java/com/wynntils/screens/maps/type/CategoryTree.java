@@ -1,6 +1,5 @@
 package com.wynntils.screens.maps.type;
 
-import com.wynntils.services.mapdata.type.MapCategory;
 import com.wynntils.utils.StringUtils;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -9,10 +8,10 @@ import java.util.List;
 public class CategoryTree {
     private final CategoryTreeNode root;
 
-    public CategoryTree(List<MapCategory> categories) {
-        root = new CategoryTreeNode(null, "root", null);
-        for (MapCategory category : categories) {
-            String[] parts = category.getCategoryId().split(":");
+    public CategoryTree(List<String> categoryIds) {
+        root = new CategoryTreeNode(null, "root");
+        for (String categoryId : categoryIds) {
+            String[] parts = categoryId.split(":");
             CategoryTreeNode currentNode = root;
             StringBuilder fullIdBuilder = new StringBuilder();
             for (int i = 0; i < parts.length; i++) {
@@ -23,12 +22,13 @@ public class CategoryTree {
 
                 CategoryTreeNode child = currentNode.getChildByName(part);
                 if (child == null) {
-                    MapCategory catForNode = (i == parts.length - 1) ? category : null;
-                    child = new CategoryTreeNode(fullId, part, catForNode);
+                    // Last part is the actual category; earlier parts are just folders
+                    child = new CategoryTreeNode(fullId, part, i == parts.length - 1, new ArrayList<>());
                     currentNode.addChild(child);
                 } else {
-                    if (i == parts.length - 1 && child.getCategory().isEmpty()) {
-                        child.setCategory(category);
+                    // If this existing node is also the last part of a different category ID, mark it as a category
+                    if (i == parts.length - 1) {
+                        child.setCategory(true);
                     }
                 }
                 currentNode = child;
@@ -54,7 +54,7 @@ public class CategoryTree {
         }
         String normalized = searchText.trim();
         List<CategoryTreeNode> filteredChildren = filterChildren(root, normalized);
-        return new CategoryTreeNode(null, "root", null, filteredChildren);
+        return new CategoryTreeNode(null, "root", filteredChildren);
     }
 
     private List<CategoryTreeNode> filterChildren(CategoryTreeNode node, String searchText) {
@@ -68,7 +68,7 @@ public class CategoryTree {
                 CategoryTreeNode newNode = new CategoryTreeNode(
                         child.getFullId(),
                         child.getName(),
-                        child.getCategory().orElse(null),
+                        child.isCategory(),     // preserve category flag
                         filteredGrandChildren
                 );
                 result.add(newNode);

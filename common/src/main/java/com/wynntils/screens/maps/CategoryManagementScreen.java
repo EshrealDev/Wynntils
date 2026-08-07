@@ -30,7 +30,7 @@ public final class CategoryManagementScreen extends WynntilsScreen {
     public CategorySearchWidget categorySearchWidget;
     public CategoryTreeWidget categoryTreeWidget;
 
-    private MapCategory selectedCategory;
+    private String selectedCategory;
 
     private CategoryManagementScreen(MainMapScreen previousScreen) {
         super(Component.literal("Category Management Screen"));
@@ -63,7 +63,7 @@ public final class CategoryManagementScreen extends WynntilsScreen {
                 284 - 25,
                 this
         );
-        categoryTreeWidget.setCategories(Services.MapData.getCategories().toList());
+        categoryTreeWidget.setCategories(Services.MapData.allPossibleCategories().toList());
         this.addRenderableWidget(categoryTreeWidget);
     }
 
@@ -95,12 +95,11 @@ public final class CategoryManagementScreen extends WynntilsScreen {
         McUtils.mc().setScreen(previousScreen);
     }
 
-    /** Called by {@link CategoryTreeWidget} when a leaf/branch with an actual category is clicked. */
-    public void setSelectedCategory(MapCategory category) {
+    public void setSelectedCategory(String category) {
         this.selectedCategory = category;
     }
 
-    public Optional<MapCategory> getSelectedCategory() {
+    public Optional<String> getSelectedCategory() {
         return Optional.ofNullable(selectedCategory);
     }
 }

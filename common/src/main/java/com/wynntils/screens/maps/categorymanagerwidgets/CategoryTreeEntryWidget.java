@@ -20,18 +20,7 @@ import org.lwjgl.glfw.GLFW;
 
 import java.util.List;
 
-/**
- * A single row in the {@link CategoryTreeWidget} tree. Handles its own rendering, layout,
- * and click handling.
- *
- * <p>All layout (arrow position, icon position, label position) is derived directly from this
- * widget's own {@code x}/{@code y} - the parent is responsible for setting {@code x} to the
- * row's already-indented position (see {@link CategoryTreeWidget#updateRowPositions()}). This
- * widget does not add any indentation of its own; {@code column} is kept only as metadata so
- * the parent can draw the tree connector lines for ancestor columns.
- */
 public class CategoryTreeEntryWidget extends AbstractWidget {
-    // ---- Layout constants (shared with CategoryTreeWidget) ----
     public static final int ROW_HEIGHT = 14;
     public static final int INDENT_WIDTH = 10;
     public static final int ARROW_WIDTH = 8;
@@ -43,20 +32,13 @@ public class CategoryTreeEntryWidget extends AbstractWidget {
     private static final CustomColor SELECTED_HIGHLIGHT = CommonColors.BLUE.withAlpha(0.35f);
 
     private final CategoryTreeNode node;
-    // Which tree column this row belongs to (how many ancestors it has). Only used by the
-    // parent widget to draw connector lines - layout in this class is based purely on x/y.
     private final int column;
     private final boolean[] siblingContinues;
-    // Whether this row reserves the ARROW_WIDTH + ARROW_ICON_GAP slot in front of its icon.
-    // Below the top level this is always true because the parent is expandable; at the top level
-    // it is set by CategoryTreeWidget and reflects whether *any* top-level category has children.
     private final boolean reserveArrowSpace;
     private boolean expanded;
     private boolean selected;
     private int iconSize = DEFAULT_ICON_SIZE;
 
-    // Mirrors of AbstractWidget's x/y, kept in sync via the setX/setY overrides below so the
-    // rest of this class can reference these fields directly instead of calling getX()/getY().
     private int x;
     private int y;
 
@@ -121,65 +103,46 @@ public class CategoryTreeEntryWidget extends AbstractWidget {
         return expanded;
     }
 
-    // ---- Public coordinate accessors (for tree connector drawing by parent) ----
-
-    /** Leftmost x-coordinate of the arrow slot (even if no arrow is drawn). Always this row's own x. */
     public int getArrowX() {
         return x;
     }
 
-    /** Center x-coordinate of the arrow. */
     public int getArrowCenterX() {
         return x + ARROW_WIDTH / 2;
     }
 
-    /** Leftmost x-coordinate of the icon. */
     public int getIconX() {
         return reserveArrowSpace ? x + ARROW_WIDTH + ARROW_ICON_GAP : x;
     }
 
-    /** Center x-coordinate of the icon. */
     public int getIconCenterX() {
         return getIconX() + iconSize / 2;
     }
 
-    /** Vertical center of the row. */
     public int getRowCenterY() {
         return y + ROW_HEIGHT / 2;
     }
 
-    /**
-     * Width of this row's own content, measured from this row's own x to the end of the label
-     * text. Used both as this widget's width (for hit-testing) and, combined with
-     * {@link #getColumn()}, by the parent to compute the overall scrollable canvas size.
-     */
     public int computeContentWidth() {
         int iconOffset = reserveArrowSpace ? ARROW_WIDTH + ARROW_ICON_GAP : 0;
         int textWidth = FontRenderer.getInstance().getFont().width(node.getName());
         return iconOffset + iconSize + ICON_TEXT_GAP + textWidth;
     }
 
-    // ---- Rendering ----
-
     @Override
     protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        // Background highlight - always spans this row's full content width starting at x, so
-        // it lines up exactly with the clickable area (isMouseOver uses getX()/width too).
         if (selected) {
             RenderUtils.drawRect(guiGraphics, SELECTED_HIGHLIGHT, x, y, width, ROW_HEIGHT);
         } else if (isHovered) {
             RenderUtils.drawRect(guiGraphics, HOVER_HIGHLIGHT, x, y, width, ROW_HEIGHT);
         }
 
-        // Arrow (only if node has children)
         if (!node.isLeaf()) {
             renderArrow(guiGraphics, getArrowX());
         }
 
-        // Icon (placeholder)
         renderIcon(guiGraphics, getIconX());
 
-        // Label text
         FontRenderer.getInstance()
                 .renderText(
                         guiGraphics,
@@ -217,8 +180,6 @@ public class CategoryTreeEntryWidget extends AbstractWidget {
                 iconSize, iconSize);
     }
 
-    // ---- Input handling ----
-
     @Override
     public boolean mouseClicked(MouseButtonEvent event, boolean isDoubleClick) {
         if (event.button() != GLFW.GLFW_MOUSE_BUTTON_LEFT) return false;
@@ -230,8 +191,8 @@ public class CategoryTreeEntryWidget extends AbstractWidget {
             return true;
         }
 
-        // Label click (only if the node has an actual category)
-        if (node.getCategory().isPresent()) {
+        // Label click – only if this node represents an actual category
+        if (node.isCategory()) {
             onSelect.run();
             return true;
         }

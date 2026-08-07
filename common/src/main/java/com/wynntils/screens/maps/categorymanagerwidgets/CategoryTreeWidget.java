@@ -43,7 +43,7 @@ public class CategoryTreeWidget extends DoubleScrollBarWidget {
 
     // ---- Public API ----
 
-    public void setCategories(List<MapCategory> categories) {
+    public void setCategories(List<String> categories) {
         fullTree = new CategoryTree(categories);
         filteredRoot = fullTree.getRoot();
         expandedFullIds.clear();
@@ -130,9 +130,10 @@ public class CategoryTreeWidget extends DoubleScrollBarWidget {
     }
 
     private void selectNode(CategoryTreeNode node) {
+        if (!node.isCategory()) return;   // should not be called for non-category nodes because the entry widget already guards this
         selectedFullId = node.getFullId();
-        node.getCategory().ifPresent(parent::setSelectedCategory);
-        rebuildVisibleRows(); // update selection highlight
+        parent.setSelectedCategory(node.getFullId());
+        rebuildVisibleRows();
     }
 
     private void recalculateCanvasSize() {
@@ -206,14 +207,15 @@ public class CategoryTreeWidget extends DoubleScrollBarWidget {
                     + CategoryTreeEntryWidget.ARROW_WIDTH / 2f;
 
             if (c == column - 1) {
-                // Immediate parent: always draw the vertical stem for this row.
-                // Extend to full row height only if the node has a next sibling.
+                // Immediate parent: always draw stem for this row
                 float endY = continues[column] ? rowY + rowHeight : midY;
                 RenderUtils.drawLine(guiGraphics, LINE_COLOR, lineX, rowY, lineX, endY, 1f);
             } else {
-                // Deeper ancestors: draw only if the ancestor or its child on the path
-                // has a next sibling.
+                // Deeper ancestor: draw only if needed to keep trunk alive
                 if (!(continues[c] || continues[c + 1])) {
+                    continue;
+                }
+                if (!(continues[c + 1] || continues[c + 2])) {
                     continue;
                 }
                 float endY = continues[c + 1] ? rowY + rowHeight : midY;
@@ -221,7 +223,7 @@ public class CategoryTreeWidget extends DoubleScrollBarWidget {
             }
         }
 
-        // Horizontal branch from immediate parent's column to the node's icon/arrow
+        // Horizontal branch from immediate parent column to node's icon/arrow
         float parentX = baseX + (column - 1) * CategoryTreeEntryWidget.INDENT_WIDTH
                 + CategoryTreeEntryWidget.ARROW_WIDTH / 2f;
         float endX = widget.getNode().isLeaf()

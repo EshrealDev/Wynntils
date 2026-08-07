@@ -1,26 +1,34 @@
 package com.wynntils.screens.maps.type;
 
-import com.wynntils.services.mapdata.type.MapCategory;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 
 public class CategoryTreeNode {
     private final String fullId;
     private final String name;
-    private MapCategory category;
     private final List<CategoryTreeNode> children = new ArrayList<>();
+    private boolean category;   // true if this node corresponds to an actual category (leaf or branch that is also a category)
 
-    public CategoryTreeNode(String fullId, String name, MapCategory category, List<CategoryTreeNode> children) {
+    // For internal/folder nodes (no category)
+    public CategoryTreeNode(String fullId, String name, List<CategoryTreeNode> children) {
         this.fullId = fullId;
         this.name = name;
-        this.category = category;
         this.children.addAll(children);
+        this.category = false;
     }
 
-    public CategoryTreeNode(String fullId, String name, MapCategory category) {
-        this(fullId, name, category, new ArrayList<>());
+    // For leaf/internal nodes that are categories
+    public CategoryTreeNode(String fullId, String name, boolean category, List<CategoryTreeNode> children) {
+        this.fullId = fullId;
+        this.name = name;
+        this.children.addAll(children);
+        this.category = category;
+    }
+
+    // Two-arg convenience constructor (folder nodes by default)
+    public CategoryTreeNode(String fullId, String name) {
+        this(fullId, name, false, new ArrayList<>());
     }
 
     public String getFullId() {
@@ -31,20 +39,20 @@ public class CategoryTreeNode {
         return name;
     }
 
-    public Optional<MapCategory> getCategory() {
-        return Optional.ofNullable(category);
-    }
-
     public List<CategoryTreeNode> getChildren() {
         return java.util.Collections.unmodifiableList(children);
     }
 
-    public boolean isCategory() {
-        return category != null;
-    }
-
     public boolean isLeaf() {
         return children.isEmpty();
+    }
+
+    public boolean isCategory() {
+        return category;
+    }
+
+    public void setCategory(boolean category) {
+        this.category = category;
     }
 
     // ---- internal methods used by CategoryTree ----
@@ -61,11 +69,6 @@ public class CategoryTreeNode {
         return null;
     }
 
-    public void setCategory(MapCategory category) {
-        this.category = category;
-    }
-
-    // ---- New method for sorting ----
     public void sortChildren(Comparator<CategoryTreeNode> comparator) {
         children.sort(comparator);
     }
