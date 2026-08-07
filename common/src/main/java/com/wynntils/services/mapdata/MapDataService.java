@@ -93,7 +93,8 @@ public class MapDataService extends Service {
 
     // in UI
     public Stream<String> allPossibleCategories() {
-        return Stream.concat(getFeatureCategoryIds(), getDefinedCategories().map(MapCategory::getCategoryId)).distinct();
+        return Stream.concat(getFeatureCategoryIds(), getDefinedCategories().map(MapCategory::getCategoryId))
+                .distinct();
     }
 
     public Stream<MapFeature> getFeatures() {

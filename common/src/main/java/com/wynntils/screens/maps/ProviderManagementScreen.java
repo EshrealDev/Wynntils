@@ -1,3 +1,7 @@
+/*
+ * Copyright © Wynntils 2026.
+ * This file is released under LGPLv3. See LICENSE for full license details.
+ */
 package com.wynntils.screens.maps;
 
 import com.wynntils.core.WynntilsMod;
@@ -28,8 +32,8 @@ public final class ProviderManagementScreen extends WynntilsScreen {
     protected void doInit() {
         super.doInit();
 
-        offsetX = (int) ((this.width - Texture. MANAGER_BACKGROUND.width()) / 2f);
-        offsetY = (int) ((this.height - Texture. MANAGER_BACKGROUND.height()) / 2f);
+        offsetX = (int) ((this.width - Texture.MANAGER_BACKGROUND.width()) / 2f);
+        offsetY = (int) ((this.height - Texture.MANAGER_BACKGROUND.height()) / 2f);
 
         Services.MapData.getFeatures().forEach((element) -> WynntilsMod.info("feature: " + element.getCategoryId()));
     }
@@ -40,7 +44,7 @@ public final class ProviderManagementScreen extends WynntilsScreen {
     }
 
     private void renderBackgroundTexture(GuiGraphics guiGraphics) {
-        RenderUtils.drawTexturedRect(guiGraphics, Texture. MANAGER_BACKGROUND, offsetX, offsetY);
+        RenderUtils.drawTexturedRect(guiGraphics, Texture.MANAGER_BACKGROUND, offsetX, offsetY);
     }
 
     @Override

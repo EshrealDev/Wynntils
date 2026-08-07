@@ -1,20 +1,21 @@
+/*
+ * Copyright © Wynntils 2026.
+ * This file is released under LGPLv3. See LICENSE for full license details.
+ */
 package com.wynntils.screens.maps.categorymanagerwidgets;
 
-import com.wynntils.core.WynntilsMod;
 import com.wynntils.screens.maps.CategoryManagementScreen;
 import com.wynntils.screens.maps.type.CategoryTree;
 import com.wynntils.screens.maps.type.CategoryTreeNode;
-import com.wynntils.services.mapdata.type.MapCategory;
 import com.wynntils.utils.colors.CustomColor;
 import com.wynntils.utils.render.RenderUtils;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.input.MouseButtonEvent;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.input.MouseButtonEvent;
 
 public class CategoryTreeWidget extends DoubleScrollBarWidget {
     private final int x;
@@ -70,8 +71,7 @@ public class CategoryTreeWidget extends DoubleScrollBarWidget {
             List<CategoryTreeNode> children = filteredRoot.getChildren();
             boolean reserveArrowSpace = groupHasExpandableMember(children);
             for (int i = 0; i < children.size(); i++) {
-                addVisibleRows(children.get(i), 0, new boolean[0],
-                        i < children.size() - 1, reserveArrowSpace);
+                addVisibleRows(children.get(i), 0, new boolean[0], i < children.size() - 1, reserveArrowSpace);
             }
         }
 
@@ -80,9 +80,11 @@ public class CategoryTreeWidget extends DoubleScrollBarWidget {
     }
 
     private void addVisibleRows(
-            CategoryTreeNode node, int column, boolean[] parentTrail,
-            boolean hasMoreSiblings, boolean reserveArrowSpace) {
-
+            CategoryTreeNode node,
+            int column,
+            boolean[] parentTrail,
+            boolean hasMoreSiblings,
+            boolean reserveArrowSpace) {
         boolean[] trail = Arrays.copyOf(parentTrail, parentTrail.length + 1);
         trail[column] = hasMoreSiblings;
 
@@ -90,21 +92,24 @@ public class CategoryTreeWidget extends DoubleScrollBarWidget {
         boolean selected = node.getFullId() != null && node.getFullId().equals(selectedFullId);
 
         CategoryTreeEntryWidget widget = new CategoryTreeEntryWidget(
-                0, 0, 0,               // positions & width set later
-                node, column, trail,
+                0,
+                0,
+                0, // positions & width set later
+                node,
+                column,
+                trail,
                 reserveArrowSpace,
-                expanded, selected,
+                expanded,
+                selected,
                 () -> toggleExpanded(node),
-                () -> selectNode(node)
-        );
+                () -> selectNode(node));
         rowWidgets.add(widget);
 
         if (!expanded) return;
 
         List<CategoryTreeNode> children = node.getChildren();
         for (int i = 0; i < children.size(); i++) {
-            addVisibleRows(children.get(i), column + 1, trail,
-                    i < children.size() - 1, true);
+            addVisibleRows(children.get(i), column + 1, trail, i < children.size() - 1, true);
         }
     }
 
@@ -130,22 +135,22 @@ public class CategoryTreeWidget extends DoubleScrollBarWidget {
     }
 
     private void selectNode(CategoryTreeNode node) {
-        if (!node.isCategory()) return;   // should not be called for non-category nodes because the entry widget already guards this
+        if (!node.isCategory())
+            return; // should not be called for non-category nodes because the entry widget already guards this
         selectedFullId = node.getFullId();
         parent.setSelectedCategory(node.getFullId());
         rebuildVisibleRows();
     }
 
     private void recalculateCanvasSize() {
-        int contentHeight = rowWidgets.size() * CategoryTreeEntryWidget.ROW_HEIGHT
-                + SCROLL_BAR_HEIGHT_PADDING;
+        int contentHeight = rowWidgets.size() * CategoryTreeEntryWidget.ROW_HEIGHT + SCROLL_BAR_HEIGHT_PADDING;
 
         int maxContentWidth = 0;
         for (CategoryTreeEntryWidget widget : rowWidgets) {
             // Content width from the column-0 anchor: indentation for this row's column, plus
             // its own arrow/icon/label extent.
-            int rowContentWidth = widget.getColumn() * CategoryTreeEntryWidget.INDENT_WIDTH
-                    + widget.computeContentWidth();
+            int rowContentWidth =
+                    widget.getColumn() * CategoryTreeEntryWidget.INDENT_WIDTH + widget.computeContentWidth();
             maxContentWidth = Math.max(maxContentWidth, rowContentWidth);
         }
 
@@ -203,8 +208,7 @@ public class CategoryTreeWidget extends DoubleScrollBarWidget {
         float midY = rowY + rowHeight / 2f;
 
         for (int c = 0; c < column; c++) {
-            float lineX = baseX + c * CategoryTreeEntryWidget.INDENT_WIDTH
-                    + CategoryTreeEntryWidget.ARROW_WIDTH / 2f;
+            float lineX = baseX + c * CategoryTreeEntryWidget.INDENT_WIDTH + CategoryTreeEntryWidget.ARROW_WIDTH / 2f;
 
             if (c == column - 1) {
                 // Immediate parent: always draw stem for this row
@@ -212,23 +216,41 @@ public class CategoryTreeWidget extends DoubleScrollBarWidget {
                 RenderUtils.drawLine(guiGraphics, LINE_COLOR, lineX, rowY, lineX, endY, 1f);
             } else {
                 // Deeper ancestor: draw only if needed to keep trunk alive
-                if (!(continues[c] || continues[c + 1])) {
+                boolean needed = false;
+
+                for (int i = c; i <= c + 1 && i < continues.length; i++) {
+                    if (continues[i]) {
+                        needed = true;
+                        break;
+                    }
+                }
+
+                if (!needed) {
                     continue;
                 }
-                if (!(continues[c + 1] || continues[c + 2])) {
+
+                boolean continuesBelow = false;
+
+                for (int i = c + 1; i <= c + 2 && i < continues.length; i++) {
+                    if (continues[i]) {
+                        continuesBelow = true;
+                        break;
+                    }
+                }
+
+                if (!continuesBelow) {
                     continue;
                 }
+
                 float endY = continues[c + 1] ? rowY + rowHeight : midY;
                 RenderUtils.drawLine(guiGraphics, LINE_COLOR, lineX, rowY, lineX, endY, 1f);
             }
         }
 
         // Horizontal branch from immediate parent column to node's icon/arrow
-        float parentX = baseX + (column - 1) * CategoryTreeEntryWidget.INDENT_WIDTH
-                + CategoryTreeEntryWidget.ARROW_WIDTH / 2f;
-        float endX = widget.getNode().isLeaf()
-                ? widget.getIconX() - 2
-                : widget.getArrowX() - 2;
+        float parentX =
+                baseX + (column - 1) * CategoryTreeEntryWidget.INDENT_WIDTH + CategoryTreeEntryWidget.ARROW_WIDTH / 2f;
+        float endX = widget.getNode().isLeaf() ? widget.getIconX() - 2 : widget.getArrowX() - 2;
 
         RenderUtils.drawLine(guiGraphics, LINE_COLOR, parentX, midY, endX, midY, 1f);
     }

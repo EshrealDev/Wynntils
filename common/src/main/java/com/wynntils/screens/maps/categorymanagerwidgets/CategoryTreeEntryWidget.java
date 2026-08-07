@@ -1,3 +1,7 @@
+/*
+ * Copyright © Wynntils 2026.
+ * This file is released under LGPLv3. See LICENSE for full license details.
+ */
 package com.wynntils.screens.maps.categorymanagerwidgets;
 
 import com.wynntils.core.text.StyledText;
@@ -10,6 +14,7 @@ import com.wynntils.utils.render.RenderUtils;
 import com.wynntils.utils.render.type.HorizontalAlignment;
 import com.wynntils.utils.render.type.TextShadow;
 import com.wynntils.utils.render.type.VerticalAlignment;
+import java.util.List;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
@@ -17,8 +22,6 @@ import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 import org.joml.Vector2f;
 import org.lwjgl.glfw.GLFW;
-
-import java.util.List;
 
 public class CategoryTreeEntryWidget extends AbstractWidget {
     public static final int ROW_HEIGHT = 14;
@@ -45,11 +48,18 @@ public class CategoryTreeEntryWidget extends AbstractWidget {
     private final Runnable onToggleExpand;
     private final Runnable onSelect;
 
-    public CategoryTreeEntryWidget(int x, int y, int width,
-                                   CategoryTreeNode node, int column, boolean[] siblingContinues,
-                                   boolean reserveArrowSpace,
-                                   boolean expanded, boolean selected,
-                                   Runnable onToggleExpand, Runnable onSelect) {
+    public CategoryTreeEntryWidget(
+            int x,
+            int y,
+            int width,
+            CategoryTreeNode node,
+            int column,
+            boolean[] siblingContinues,
+            boolean reserveArrowSpace,
+            boolean expanded,
+            boolean selected,
+            Runnable onToggleExpand,
+            Runnable onSelect) {
         super(x, y, width, ROW_HEIGHT, Component.literal(""));
         this.x = x;
         this.y = y;
@@ -162,22 +172,21 @@ public class CategoryTreeEntryWidget extends AbstractWidget {
 
         List<Vector2f> vertices = expanded
                 ? List.of(
-                new Vector2f(cx - r, cy - r / 1.5f),
-                new Vector2f(cx + r, cy - r / 1.5f),
-                new Vector2f(cx, cy + r / 1.5f))
+                        new Vector2f(cx - r, cy - r / 1.5f),
+                        new Vector2f(cx + r, cy - r / 1.5f),
+                        new Vector2f(cx, cy + r / 1.5f))
                 : List.of(
-                new Vector2f(cx - r / 1.5f, cy - r),
-                new Vector2f(cx - r / 1.5f, cy + r),
-                new Vector2f(cx + r / 1.5f, cy));
+                        new Vector2f(cx - r / 1.5f, cy - r),
+                        new Vector2f(cx - r / 1.5f, cy + r),
+                        new Vector2f(cx + r / 1.5f, cy));
 
         RenderUtils.drawPolygon(guiGraphics, CommonColors.WHITE, CustomColor.NONE, 0f, vertices);
     }
 
     private void renderIcon(GuiGraphics guiGraphics, int iconX) {
         // Placeholder – replace with actual icon loading later
-        RenderUtils.drawRect(guiGraphics, CommonColors.GRAY,
-                iconX, y + (ROW_HEIGHT - iconSize) / 2f,
-                iconSize, iconSize);
+        RenderUtils.drawRect(
+                guiGraphics, CommonColors.GRAY, iconX, y + (ROW_HEIGHT - iconSize) / 2f, iconSize, iconSize);
     }
 
     @Override
@@ -201,9 +210,7 @@ public class CategoryTreeEntryWidget extends AbstractWidget {
     }
 
     private boolean isMouseOverArrow(double mouseX, double mouseY) {
-        return MathUtils.isInside((int) mouseX, (int) mouseY,
-                x, x + ARROW_WIDTH,
-                y, y + ROW_HEIGHT);
+        return MathUtils.isInside((int) mouseX, (int) mouseY, x, x + ARROW_WIDTH, y, y + ROW_HEIGHT);
     }
 
     @Override

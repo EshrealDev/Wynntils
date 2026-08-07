@@ -1,3 +1,7 @@
+/*
+ * Copyright © Wynntils 2026.
+ * This file is released under LGPLv3. See LICENSE for full license details.
+ */
 package com.wynntils.screens.maps.type;
 
 import java.util.ArrayList;
@@ -8,7 +12,8 @@ public class CategoryTreeNode {
     private final String fullId;
     private final String name;
     private final List<CategoryTreeNode> children = new ArrayList<>();
-    private boolean category;   // true if this node corresponds to an actual category (leaf or branch that is also a category)
+    private boolean
+            category; // true if this node corresponds to an actual category (leaf or branch that is also a category)
 
     // For internal/folder nodes (no category)
     public CategoryTreeNode(String fullId, String name, List<CategoryTreeNode> children) {

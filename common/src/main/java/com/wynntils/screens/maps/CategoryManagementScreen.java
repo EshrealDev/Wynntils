@@ -1,22 +1,22 @@
+/*
+ * Copyright © Wynntils 2026.
+ * This file is released under LGPLv3. See LICENSE for full license details.
+ */
 package com.wynntils.screens.maps;
 
-import com.wynntils.core.WynntilsMod;
 import com.wynntils.core.components.Services;
 import com.wynntils.core.consumers.screens.WynntilsScreen;
 import com.wynntils.screens.base.widgets.TextInputBoxWidget;
 import com.wynntils.screens.maps.categorymanagerwidgets.CategorySearchWidget;
 import com.wynntils.screens.maps.categorymanagerwidgets.CategoryTreeWidget;
-import com.wynntils.screens.maps.categorymanagerwidgets.DoubleScrollBarWidget;
-import com.wynntils.services.mapdata.type.MapCategory;
 import com.wynntils.utils.mc.McUtils;
 import com.wynntils.utils.render.RenderUtils;
 import com.wynntils.utils.render.Texture;
+import java.util.Optional;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
-
-import java.util.Optional;
 
 public final class CategoryManagementScreen extends WynntilsScreen {
     private static final int WIDTH_OFFSET = 15;
@@ -25,7 +25,6 @@ public final class CategoryManagementScreen extends WynntilsScreen {
     private final MainMapScreen previousScreen;
     private int offsetX;
     private int offsetY;
-
 
     public CategorySearchWidget categorySearchWidget;
     public CategoryTreeWidget categoryTreeWidget;
@@ -45,25 +44,17 @@ public final class CategoryManagementScreen extends WynntilsScreen {
     protected void doInit() {
         super.doInit();
 
-        offsetX = (int) ((this.width - Texture. MANAGER_BACKGROUND.width()) / 2f);
-        offsetY = (int) ((this.height - Texture. MANAGER_BACKGROUND.height()) / 2f);
+        offsetX = (int) ((this.width - Texture.MANAGER_BACKGROUND.width()) / 2f);
+        offsetY = (int) ((this.height - Texture.MANAGER_BACKGROUND.height()) / 2f);
 
         categorySearchWidget = new CategorySearchWidget(
-                offsetX + WIDTH_OFFSET,
-                offsetY + HEIGHT_OFFSET,
-                (text) -> categoryTreeWidget.filter(text),
-                this
-        );
+                offsetX + WIDTH_OFFSET, offsetY + HEIGHT_OFFSET, (text) -> categoryTreeWidget.filter(text), this);
         this.addRenderableWidget(categorySearchWidget);
 
-        categoryTreeWidget = new CategoryTreeWidget(
-                offsetX + WIDTH_OFFSET,
-                offsetY + HEIGHT_OFFSET + 25,
-                200,
-                284 - 25,
-                this
-        );
-        categoryTreeWidget.setCategories(Services.MapData.allPossibleCategories().toList());
+        categoryTreeWidget =
+                new CategoryTreeWidget(offsetX + WIDTH_OFFSET, offsetY + HEIGHT_OFFSET + 25, 200, 284 - 25, this);
+        categoryTreeWidget.setCategories(
+                Services.MapData.allPossibleCategories().toList());
         this.addRenderableWidget(categoryTreeWidget);
     }
 
@@ -75,7 +66,7 @@ public final class CategoryManagementScreen extends WynntilsScreen {
     }
 
     private void renderBackgroundTexture(GuiGraphics guiGraphics) {
-        RenderUtils.drawTexturedRect(guiGraphics, Texture. MANAGER_BACKGROUND, offsetX, offsetY);
+        RenderUtils.drawTexturedRect(guiGraphics, Texture.MANAGER_BACKGROUND, offsetX, offsetY);
     }
 
     @Override

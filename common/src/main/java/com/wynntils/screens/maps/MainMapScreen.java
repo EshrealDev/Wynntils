@@ -4,7 +4,6 @@
  */
 package com.wynntils.screens.maps;
 
-import com.wynntils.core.WynntilsMod;
 import com.wynntils.core.components.Managers;
 import com.wynntils.core.components.Services;
 import com.wynntils.features.debug.MappingProgressFeature;
@@ -183,8 +182,7 @@ public final class MainMapScreen extends AbstractMapScreen {
                         Component.literal("[>] ")
                                 .withStyle(ChatFormatting.AQUA)
                                 .append(Component.translatable("Category Management")),
-                        Component.translatable("Edit categories")
-                                .withStyle(ChatFormatting.GRAY))));
+                        Component.translatable("Edit categories").withStyle(ChatFormatting.GRAY))));
 
         addMapButton(new MapButton(
                 Texture.PROVIDER_MANAGER_ICON,
@@ -193,8 +191,7 @@ public final class MainMapScreen extends AbstractMapScreen {
                         Component.literal("[>] ")
                                 .withStyle(ChatFormatting.RED)
                                 .append(Component.translatable("Provider Management")),
-                        Component.translatable("Edit providers")
-                                .withStyle(ChatFormatting.GRAY))));
+                        Component.translatable("Edit providers").withStyle(ChatFormatting.GRAY))));
 
         addMapButton(new MapButton(
                 Texture.HELP_ICON,

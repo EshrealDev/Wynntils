@@ -1,24 +1,20 @@
+/*
+ * Copyright © Wynntils 2026.
+ * This file is released under LGPLv3. See LICENSE for full license details.
+ */
 package com.wynntils.screens.maps.categorymanagerwidgets;
 
 import com.mojang.blaze3d.platform.cursor.CursorTypes;
-import com.wynntils.core.text.StyledText;
 import com.wynntils.screens.maps.CategoryManagementScreen;
 import com.wynntils.utils.MathUtils;
-import com.wynntils.utils.colors.CommonColors;
-import com.wynntils.utils.render.FontRenderer;
 import com.wynntils.utils.render.RenderUtils;
 import com.wynntils.utils.render.Texture;
-import com.wynntils.utils.render.type.HorizontalAlignment;
-import com.wynntils.utils.render.type.TextShadow;
-import com.wynntils.utils.render.type.VerticalAlignment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
-
-import java.util.List;
 
 public abstract class DoubleScrollBarWidget extends AbstractWidget {
     private static final float SCROLL_FACTOR = 10f;
@@ -100,7 +96,7 @@ public abstract class DoubleScrollBarWidget extends AbstractWidget {
                 this.width - SCROLL_BAR_HEIGHT_PADDING * 2 - Texture.MANAGER_SCROLL_BAR_VERTICAL.width() - 4,
                 this.height - SCROLL_BAR_WIDTH_PADDING * 2 - Texture.MANAGER_SCROLL_BAR_HORIZONTAL.height() - 4);
 
-        renderCategoryTree(guiGraphics,mouseX, mouseY, partialTick);
+        renderCategoryTree(guiGraphics, mouseX, mouseY, partialTick);
 
         RenderUtils.disableScissor(guiGraphics);
 
@@ -136,7 +132,12 @@ public abstract class DoubleScrollBarWidget extends AbstractWidget {
         float barAreaHeight = getVerticalBarAreaBottom() - barAreaTop;
 
         RenderUtils.drawNineSliceScalingTexturedRect(
-                guiGraphics, Texture.MANAGER_SCROLL_BAR_VERTICAL, barX, barAreaTop, Texture.MANAGER_SCROLL_BAR_VERTICAL.width(), barAreaHeight);
+                guiGraphics,
+                Texture.MANAGER_SCROLL_BAR_VERTICAL,
+                barX,
+                barAreaTop,
+                Texture.MANAGER_SCROLL_BAR_VERTICAL.width(),
+                barAreaHeight);
 
         verticalButtonLength = getScaledButtonLength(getVerticalTrackHeight(), this.height, canvasHeight);
 
@@ -144,10 +145,17 @@ public abstract class DoubleScrollBarWidget extends AbstractWidget {
         float thumbTop = getVerticalScrollTrackTop();
         float thumbBottom = getVerticalScrollTrackBottom();
 
-        scrollBarY = maxScrollOffset <= 0 ? thumbTop : MathUtils.map(scrollOffsetY, 0, maxScrollOffset, thumbTop, thumbBottom);
+        scrollBarY = maxScrollOffset <= 0
+                ? thumbTop
+                : MathUtils.map(scrollOffsetY, 0, maxScrollOffset, thumbTop, thumbBottom);
 
         RenderUtils.drawNineSliceScalingTexturedRect(
-                guiGraphics, Texture.MANAGER_SCROLL_BAR_BUTTON, barX, scrollBarY, Texture.MANAGER_SCROLL_BAR_VERTICAL.width(), verticalButtonLength);
+                guiGraphics,
+                Texture.MANAGER_SCROLL_BAR_BUTTON,
+                barX,
+                scrollBarY,
+                Texture.MANAGER_SCROLL_BAR_VERTICAL.width(),
+                verticalButtonLength);
     }
 
     private void renderHorizontalScroll(GuiGraphics guiGraphics) {
@@ -162,7 +170,12 @@ public abstract class DoubleScrollBarWidget extends AbstractWidget {
         float barAreaWidth = getHorizontalBarAreaRight() - barAreaLeft;
 
         RenderUtils.drawNineSliceScalingTexturedRect(
-                guiGraphics, Texture.MANAGER_SCROLL_BAR_HORIZONTAL, barAreaLeft, barY, barAreaWidth, Texture.MANAGER_SCROLL_BAR_HORIZONTAL.height());
+                guiGraphics,
+                Texture.MANAGER_SCROLL_BAR_HORIZONTAL,
+                barAreaLeft,
+                barY,
+                barAreaWidth,
+                Texture.MANAGER_SCROLL_BAR_HORIZONTAL.height());
 
         horizontalButtonLength = getScaledButtonLength(getHorizontalTrackWidth(), this.width, canvasWidth);
 
@@ -170,12 +183,18 @@ public abstract class DoubleScrollBarWidget extends AbstractWidget {
         float thumbLeft = getHorizontalScrollTrackLeft();
         float thumbRight = getHorizontalScrollTrackRight();
 
-        scrollBarX = maxScrollOffset <= 0 ? thumbLeft : MathUtils.map(scrollOffsetX, 0, maxScrollOffset, thumbLeft, thumbRight);
+        scrollBarX = maxScrollOffset <= 0
+                ? thumbLeft
+                : MathUtils.map(scrollOffsetX, 0, maxScrollOffset, thumbLeft, thumbRight);
 
         RenderUtils.drawNineSliceScalingTexturedRect(
-                guiGraphics, Texture.MANAGER_SCROLL_BAR_BUTTON, scrollBarX, barY, horizontalButtonLength, Texture.MANAGER_SCROLL_BAR_HORIZONTAL.height());
+                guiGraphics,
+                Texture.MANAGER_SCROLL_BAR_BUTTON,
+                scrollBarX,
+                barY,
+                horizontalButtonLength,
+                Texture.MANAGER_SCROLL_BAR_HORIZONTAL.height());
     }
-
 
     private float getScaledButtonLength(float trackLength, int viewportSize, int canvasSize) {
         if (canvasSize <= 0) return trackLength;
@@ -190,7 +209,11 @@ public abstract class DoubleScrollBarWidget extends AbstractWidget {
             double newScrollY = event.y() - dragOffsetY;
 
             int newOffset = Math.round(MathUtils.map(
-                    (float) newScrollY, getVerticalScrollTrackTop(), getVerticalScrollTrackBottom(), 0, getMaxScrollOffsetY()));
+                    (float) newScrollY,
+                    getVerticalScrollTrackTop(),
+                    getVerticalScrollTrackBottom(),
+                    0,
+                    getMaxScrollOffsetY()));
 
             scrollOffsetY = Math.max(0, Math.min(newOffset, getMaxScrollOffsetY()));
 
@@ -201,7 +224,11 @@ public abstract class DoubleScrollBarWidget extends AbstractWidget {
             double newScrollX = event.x() - dragOffsetX;
 
             int newOffset = Math.round(MathUtils.map(
-                    (float) newScrollX, getHorizontalScrollTrackLeft(), getHorizontalScrollTrackRight(), 0, getMaxScrollOffsetX()));
+                    (float) newScrollX,
+                    getHorizontalScrollTrackLeft(),
+                    getHorizontalScrollTrackRight(),
+                    0,
+                    getMaxScrollOffsetX()));
 
             scrollOffsetX = Math.max(0, Math.min(newOffset, getMaxScrollOffsetX()));
 
@@ -243,7 +270,9 @@ public abstract class DoubleScrollBarWidget extends AbstractWidget {
             return true;
         }
 
-        if (!draggingScrollX && getMaxScrollOffsetX() > 0 && isOntopOfHorizontalScrollDragButton(event.x(), event.y())) {
+        if (!draggingScrollX
+                && getMaxScrollOffsetX() > 0
+                && isOntopOfHorizontalScrollDragButton(event.x(), event.y())) {
             draggingScrollX = true;
             dragOffsetX = event.x() - scrollBarX;
             return true;
@@ -277,7 +306,8 @@ public abstract class DoubleScrollBarWidget extends AbstractWidget {
 
         float top = Math.min(getHorizontalScrollBarY(), getHorizontalArrowButtonY());
 
-        return MathUtils.isInside((int) mouseX, (int) mouseY, this.x, this.x + this.width, (int) top, this.y + this.height);
+        return MathUtils.isInside(
+                (int) mouseX, (int) mouseY, this.x, this.x + this.width, (int) top, this.y + this.height);
     }
 
     private int getMaxScrollOffsetX() {
@@ -301,7 +331,10 @@ public abstract class DoubleScrollBarWidget extends AbstractWidget {
     }
 
     private float getHorizontalScrollBarY() {
-        return this.y + this.height - Texture.MANAGER_SCROLL_BAR_HORIZONTAL.height() - HORIZONTAL_SCROLL_BAR_EDGE_PADDING;
+        return this.y
+                + this.height
+                - Texture.MANAGER_SCROLL_BAR_HORIZONTAL.height()
+                - HORIZONTAL_SCROLL_BAR_EDGE_PADDING;
     }
 
     // --- Vertical bar geometry ---
@@ -434,37 +467,53 @@ public abstract class DoubleScrollBarWidget extends AbstractWidget {
 
     private boolean isOntopOfVerticalUpButton(double mouseX, double mouseY) {
         if (!isVerticalScrollNeeded()) return false;
-        return isOntopOfArrowButton(mouseX, mouseY, getVerticalArrowButtonX(), getVerticalUpButtonY(),
-                SCROLL_ARROW_BUTTON_WIDTH_VERTICAL, SCROLL_ARROW_BUTTON_HEIGHT_VERTICAL);
+        return isOntopOfArrowButton(
+                mouseX,
+                mouseY,
+                getVerticalArrowButtonX(),
+                getVerticalUpButtonY(),
+                SCROLL_ARROW_BUTTON_WIDTH_VERTICAL,
+                SCROLL_ARROW_BUTTON_HEIGHT_VERTICAL);
     }
 
     private boolean isOntopOfVerticalDownButton(double mouseX, double mouseY) {
         if (!isVerticalScrollNeeded()) return false;
-        return isOntopOfArrowButton(mouseX, mouseY, getVerticalArrowButtonX(), getVerticalDownButtonY(),
-                SCROLL_ARROW_BUTTON_WIDTH_VERTICAL, SCROLL_ARROW_BUTTON_HEIGHT_VERTICAL);
+        return isOntopOfArrowButton(
+                mouseX,
+                mouseY,
+                getVerticalArrowButtonX(),
+                getVerticalDownButtonY(),
+                SCROLL_ARROW_BUTTON_WIDTH_VERTICAL,
+                SCROLL_ARROW_BUTTON_HEIGHT_VERTICAL);
     }
 
     private boolean isOntopOfHorizontalLeftButton(double mouseX, double mouseY) {
         if (!isHorizontalScrollNeeded()) return false;
-        return isOntopOfArrowButton(mouseX, mouseY, getHorizontalLeftButtonX(), getHorizontalArrowButtonY(),
-                SCROLL_ARROW_BUTTON_WIDTH_HORIZONTAL, SCROLL_ARROW_BUTTON_HEIGHT_HORIZONTAL);
+        return isOntopOfArrowButton(
+                mouseX,
+                mouseY,
+                getHorizontalLeftButtonX(),
+                getHorizontalArrowButtonY(),
+                SCROLL_ARROW_BUTTON_WIDTH_HORIZONTAL,
+                SCROLL_ARROW_BUTTON_HEIGHT_HORIZONTAL);
     }
 
     private boolean isOntopOfHorizontalRightButton(double mouseX, double mouseY) {
         if (!isHorizontalScrollNeeded()) return false;
-        return isOntopOfArrowButton(mouseX, mouseY, getHorizontalRightButtonX(), getHorizontalArrowButtonY(),
-                SCROLL_ARROW_BUTTON_WIDTH_HORIZONTAL, SCROLL_ARROW_BUTTON_HEIGHT_HORIZONTAL);
+        return isOntopOfArrowButton(
+                mouseX,
+                mouseY,
+                getHorizontalRightButtonX(),
+                getHorizontalArrowButtonY(),
+                SCROLL_ARROW_BUTTON_WIDTH_HORIZONTAL,
+                SCROLL_ARROW_BUTTON_HEIGHT_HORIZONTAL);
     }
 
-    private boolean isOntopOfArrowButton(double mouseX, double mouseY, float buttonX, float buttonY,
-                                         int buttonWidth, int buttonHeight) {
+    private boolean isOntopOfArrowButton(
+            double mouseX, double mouseY, float buttonX, float buttonY, int buttonWidth, int buttonHeight) {
         return MathUtils.isInside(
-                (int) mouseX,
-                (int) mouseY,
-                (int) buttonX,
-                (int) (buttonX + buttonWidth),
-                (int) buttonY,
-                (int) (buttonY + buttonHeight));
+                (int) mouseX, (int) mouseY, (int) buttonX, (int) (buttonX + buttonWidth), (int) buttonY, (int)
+                        (buttonY + buttonHeight));
     }
 
     @Override

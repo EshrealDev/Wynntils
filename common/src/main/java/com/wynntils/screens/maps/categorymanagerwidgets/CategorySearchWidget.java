@@ -1,3 +1,7 @@
+/*
+ * Copyright © Wynntils 2026.
+ * This file is released under LGPLv3. See LICENSE for full license details.
+ */
 package com.wynntils.screens.maps.categorymanagerwidgets;
 
 import com.wynntils.core.text.StyledText;
@@ -10,10 +14,9 @@ import com.wynntils.utils.render.Texture;
 import com.wynntils.utils.render.type.HorizontalAlignment;
 import com.wynntils.utils.render.type.TextShadow;
 import com.wynntils.utils.render.type.VerticalAlignment;
+import java.util.function.Consumer;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-
-import java.util.function.Consumer;
 
 public class CategorySearchWidget extends SearchWidget {
     public CategorySearchWidget(int x, int y, Consumer<String> onUpdateConsumer, TextboxScreen textboxScreen) {

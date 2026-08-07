@@ -1,3 +1,7 @@
+/*
+ * Copyright © Wynntils 2026.
+ * This file is released under LGPLv3. See LICENSE for full license details.
+ */
 package com.wynntils.screens.maps.type;
 
 import com.wynntils.utils.StringUtils;
@@ -68,9 +72,8 @@ public class CategoryTree {
                 CategoryTreeNode newNode = new CategoryTreeNode(
                         child.getFullId(),
                         child.getName(),
-                        child.isCategory(),     // preserve category flag
-                        filteredGrandChildren
-                );
+                        child.isCategory(), // preserve category flag
+                        filteredGrandChildren);
                 result.add(newNode);
             }
         }
